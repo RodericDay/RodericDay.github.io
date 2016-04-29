@@ -7,9 +7,35 @@
   <title>roderic.ca</title>
 <body>
   <a href="https://notes.roderic.ca">Notes</a><br>
-  <a href="http://roderic.ca/timer">Timer</a><br>
-  <a href="https://projecteuler.net">
-    <img src="https://projecteuler.net/profile/rodericday.png" alt="Project Euler"/>
-  </a>
+  <a href="https://github.com/RodericDay">GitHub Profile</a><br>
 </body>
+<script>
+
+function hasHomepage(repo) {
+    return repo.homepage
+}
+
+function processSuccessfulRequest() {
+    var list = document.createElement("ul");
+    document.body.appendChild(list);
+    function append(link) {list.appendChild(link);}
+    JSON.parse(this.response).items.filter(hasHomepage).forEach(function(repo) {
+        var entry = document.createElement("div");
+        list.appendChild(entry);
+        var a = document.createElement("a");
+        entry.appendChild(a);
+        a.href = repo.homepage;
+        a.textContent = repo.description || repo.name;
+    });
+}
+
+function makeRequest() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://api.github.com/search/repositories?q=user:RodericDay&fork:false");
+    xhr.send();
+    xhr.onload = processSuccessfulRequest;
+}
+
+window.addEventListener("load", makeRequest);
+</script>
 </html>
